@@ -1,0 +1,135 @@
+import React, { Component } from 'react';
+import './style.css';
+
+class ScoreCard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+      wk: 0,
+      balls: 0,
+      fovers: 0,
+      currentBowler: '',
+      bowlers: {},
+    };
+  }
+
+  updateBowlerStats = (runs, isWicket = false) => {
+    const { currentBowler, bowlers } = this.state;
+    if (!currentBowler) return;
+
+    const bowler = bowlers[currentBowler] || { runs: 0, balls: 0, wickets: 0 };
+    bowler.runs += runs;
+    bowler.balls += 1;
+    if (isWicket) bowler.wickets += 1;
+    bowlers[currentBowler] = bowler;
+    this.setState({ bowlers });
+  };
+
+  handleBall = (runs, isWicket = false) => {
+    const newBalls = this.state.balls + 1;
+    const overs = Math.floor(newBalls / 6);
+    const tballs = newBalls % 6;
+    const fovers = `${overs}.${tballs}`;
+
+    this.setState({
+      count: this.state.count + runs,
+      balls: newBalls,
+      fovers: fovers,
+    });
+
+    this.updateBowlerStats(runs, isWicket);
+
+    if (isWicket) {
+      const newWk = this.state.wk + 1;
+      this.setState({ wk: newWk });
+      if (newWk === 10) {
+        alert("All out");
+        alert("Target is: " + (this.state.count + 1));
+        this.reset();
+      }
+    }
+  };
+
+  handleBowlerChange = (e) => {
+    this.setState({ currentBowler: e.target.value });
+  };
+
+  reset = () => {
+    this.setState({
+      count: 0,
+      wk: 0,
+      balls: 0,
+      fovers: 0,
+      bowlers: {},
+      currentBowler: ''
+    });
+  };
+
+  renderBowlingCard = () => {
+    const { bowlers } = this.state;
+    return (
+      <fieldset className='block'>
+        <h3>Bowling Card:</h3>
+        <hr />
+        <table border="1" style={{ margin: "auto" }}>
+          <thead>
+            <tr>
+              <th>Bowler</th>
+              <th>Overs</th>
+              <th>Runs</th>
+              <th>Wickets</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(bowlers).map(([name, stats]) => {
+              const overs = `${Math.floor(stats.balls / 6)}.${stats.balls % 6}`;
+              return (
+                <tr key={name}>
+                  <td>{name}</td>
+                  <td>{overs}</td>
+                  <td>{stats.runs}</td>
+                  <td>{stats.wickets}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </fieldset>
+    );
+  };
+
+  render() {
+    return (
+      <div style={{ backgroundImage: "url('https://images.adsttc.com/media/images/62fb/da85/dfae/2a01/6f1d/1adc/large_jpg/compton-and-edrich-stands-lords-cricket-ground-wilkinsoneyre_1.jpg?1660672666')" }}>
+        <div className="cric">
+          <h1>SCORECARD</h1>
+          <h1> Score : {this.state.count}/{this.state.wk}</h1>
+          <h2>Overs: {this.state.fovers}</h2>
+          <h2>Balls left : {120 - this.state.balls}</h2>
+          <h1>Remaining wickets: {10 - this.state.wk}</h1>
+
+          <fieldset className='block'>
+            <h3>Batting Controls:</h3>
+            <hr />
+            <label>Select Bowler: </label>
+            <input type="text" value={this.state.currentBowler} onChange={this.handleBowlerChange} placeholder="Enter bowler name" /><br /><br />
+
+            <button onClick={() => this.handleBall(0)}>Dot ball</button><br /><br />
+            <button onClick={() => this.handleBall(1)}>One</button>
+            <button onClick={() => this.handleBall(2)}>Two</button>
+            <button onClick={() => this.handleBall(3)}>Three</button><br /><br />
+            <button onClick={() => this.handleBall(4)}>Four</button>
+            <button onClick={() => this.handleBall(6)}>Six</button><br /><br />
+            <button className='button-block' onClick={() => this.handleBall(0, true)}>Wicket</button><br /><br />
+            <button onClick={this.reset}>Reset the Score</button><br /><br />
+          </fieldset>
+
+          {this.renderBowlingCard()}
+        </div>
+      </div>
+    );
+  }
+}
+
+export default ScoreCard;

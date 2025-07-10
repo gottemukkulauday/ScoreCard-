@@ -1,0 +1,68 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-image: url('https://images.adsttc.com/media/images/62fb/da85/dfae/2a01/6f1d/1adc/large_jpg/compton-and-edrich-stands-lords-cricket-ground-wilkinsoneyre_1.jpg?1660672666');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.app {
+  background-color: rgba(0, 0, 0, 0.6);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.overlay {
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+h1, h2, h3 {
+  text-align: center;
+  color: #fff;
+}
+
+select, button {
+  margin: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.buttons button {
+  margin: 5px;
+  width: 80px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .buttons button {
+    width: 100%;
+  }
+
+  select {
+    width: 100%;
+  }
+}
